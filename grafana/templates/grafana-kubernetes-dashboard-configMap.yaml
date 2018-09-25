@@ -1,0 +1,11 @@
+{{- if .Values.sidecar.dashboards.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubernetes-grafana-dashboard
+  labels:
+     grafana_dashboard: "1"
+data:
+  k8s-dashboard.json: |-
+{{ .Files.Get "dashboards/grafana-kubernetes-dashboard.json" | indent 4 }}
+{{- end }}

@@ -1,0 +1,11 @@
+{{- if .Values.sidecar.dashboards.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-ingress-grafana-dashboard
+  labels:
+     grafana_dashboard: "1"
+data:
+  nginx-ingress-dashboard.json: |-
+{{ .Files.Get "dashboards/grafana-ingress-nginx-dashboard.json" | indent 4 }}
+{{- end }}

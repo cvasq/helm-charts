@@ -1,0 +1,113 @@
+rbac:
+  create: true
+  pspEnabled: true
+serviceAccount:
+  create: true
+  name:
+
+replicas: 1
+
+deploymentStrategy: RollingUpdate
+
+image:
+  repository: grafana/grafana
+  tag: 5.2.4
+  pullPolicy: IfNotPresent
+
+securityContext:
+  runAsUser: 472
+  fsGroup: 472
+
+downloadDashboardsImage:
+  repository: appropriate/curl
+  tag: latest
+  pullPolicy: IfNotPresent
+
+## Expose the grafana service to be accessed from outside the cluster (LoadBalancer service).
+## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+## ref: http://kubernetes.io/docs/user-guide/services/
+##
+service:
+  type: NodePort
+  port: 80
+  annotations:
+    prometheus.io/port: "80"
+    prometheus.io/scrape: "true"
+
+  labels: {}
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/add-base-url: 'true'
+    certmanager.k8s.io/cluster-issuer: letsencrypt-production
+  path: /demos/grafana
+  hosts:
+    - test.cobranix.com
+  tls:
+  - hosts:
+    - test.cobranix.com
+    secretName: tls-production-cert
+
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+persistence:
+  enabled: false
+
+adminUser: admin
+#adminPassword: <PASSWORD>
+
+env: {}
+envFromSecret: ""
+extraSecretMounts: []
+
+# Pass the plugins you want installed as a comma separated list.
+plugins: "grafana-clock-panel,grafana-piechart-panel"
+
+## Configure grafana datasources
+## ref: http://docs.grafana.org/administration/provisioning/#datasources
+##
+datasources: {}
+dashboardProviders: {}
+dashboards: {}
+dashboardsConfigMaps: {}
+
+## Grafana's primary configuration
+grafana.ini:
+  paths:
+    data: /var/lib/grafana/data
+    logs: /var/log/grafana
+    plugins: /var/lib/grafana/plugins
+    provisioning: /etc/grafana/provisioning
+  analytics:
+    check_for_updates: true
+  log:
+    mode: console
+  grafana_net:
+    url: https://grafana.net
+  server:
+    root_url: https://test.cobranix.com/demos/grafana/
+  auth.anonymous:
+    enabled: true
+
+## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
+## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
+sidecar:
+  image: kiwigrid/k8s-sidecar:0.0.3
+  imagePullPolicy: IfNotPresent
+  dashboards:
+    enabled: true
+    # label that the configmaps with dashboards are marked with
+    label: grafana_dashboard
+    # folder in the pod that should hold the collected dashboards
+    folder: /tmp/dashboards
+
+  datasources:
+    enabled: true
+    # label that the configmaps with datasources are marked with
+    label: grafana_datasource
