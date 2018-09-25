@@ -3,11 +3,31 @@ entries:
   go-vue-websockets:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-09-24T20:10:00.589478799-07:00
+    created: 2018-09-24T20:33:20.099891621-07:00
     description: A Helm chart for Kubernetes
     digest: f7c574ee87e2e256d04d6e2fb4b282190e807fe39eaf0060c4abab88a206bf1f
     name: go-vue-websockets
     urls:
     - https://cvasq.github.com/helm-charts/go-vue-websockets-0.1.0.tgz
     version: 0.1.0
-generated: 2018-09-24T20:10:00.588751898-07:00
+  grafana:
+  - appVersion: 5.2.4
+    created: 2018-09-24T20:33:20.101780581-07:00
+    description: The leading tool for querying and visualizing time series and metrics.
+    digest: ba43e6a05c31c334b7fe2967605a7dc3d7e0ed2b8f63e111d19ec2335aa97425
+    engine: gotpl
+    home: https://grafana.net
+    icon: https://raw.githubusercontent.com/grafana/grafana/master/public/img/logo_transparent_400x.png
+    kubeVersion: ^1.8.0-0
+    maintainers:
+    - email: zanhsieh@gmail.com
+      name: zanhsieh
+    - email: rluckie@cisco.com
+      name: rtluckie
+    name: grafana
+    sources:
+    - https://github.com/grafana/grafana
+    urls:
+    - https://cvasq.github.com/helm-charts/grafana-1.14.7.tgz
+    version: 1.14.7
+generated: 2018-09-24T20:33:20.099613631-07:00
