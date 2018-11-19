@@ -4,6 +4,7 @@ Helm packages for my personal site.
 
 This helm chart repo is hosted on Github pages. Packages are served from the docs directory in this repo.
 
+See: https://github.com/helm/helm/blob/master/docs/chart_repository.md#github-pages-example
 
 ## Adding a new Helm package
 
